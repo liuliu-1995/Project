@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>css卡片特效</title>
+    <style>
+        /*
+        用到的css特性
+
+        transform-style
+        设置元素的子元素是位于3D 空间中还是平面中 preserve-3d/flat 这个属性不会被继承
+
+        background linear-gradient
+        背景渐变色
+
+        mix-blend-mode
+        描述了元素的内容应该与元素的直系父元素的内容和元素的背景如何混合
+         color-dodge
+
+        --
+        css变量
+        */
+        body {
+            width: 100vw;
+            height: 100vh;
+            transform-style: preserve-3d;
+            perspective: 500px;
+            overflow: hidden;
+        }
+
+        div {
+            --per: 30%;
+            width: 324px;
+            height: 573px;
+            position: relative;
+            background: url('./imgs/1.png') no-repeat;
+            background-size: cover;
+            transform-style: preserve-3d;
+            margin: 100px auto;
+            transition: all .2s;
+            &::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(
+                    115deg,
+                    transparent 0%,
+                    rgba(255, 255, 255, 0.5) var(--per), 
+                    rgba(0, 0, 0, .5) calc(var(--per) + 25%), 
+                    rgba(255, 255, 255, .5) calc(var(--per) + 50%), 
+                transparent 100%);
+                mix-blend-mode: color-dodge;
+            }
+        }
+        #g-img {
+            --per: 30%;
+            position: relative;
+            background: url('./imgs/1.png') no-repeat;
+            background-size: cover;
+            
+            &::after {
+                content: "";
+                display: none;
+                position: absolute;
+                inset: 0;
+                background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/13471/sparkles.gif");
+                mix-blend-mode: color-dodge;
+            }
+            
+            &::before {
+                content: "";
+                display: none;
+                position: absolute;
+                background: 
+                    linear-gradient(
+                        115deg, 
+                        transparent 0%, 
+                        rgba(255, 255, 255, 0.7) var(--per), 
+                        rgba(0, 0, 0, .6) calc(var(--per) + 25%), 
+                        rgba(255, 255, 255, .5) calc(var(--per) + 50%), 
+                        transparent 100%
+                    );
+                mix-blend-mode: color-dodge;
+            }
+            
+            &:hover::after,
+            &:hover::before {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="element">
+        <div id="g-img"></div>
+    </div>
+    <script>
+        // 限制旋转范围
+        const multiple = 15;
+
+        const mouseOverContainer = document.getElementsByTagName("body")[0];
+        const element = document.getElementById("element");
+        const img = document.getElementById("g-img");
+
+        function transformElement(x, y) {
+            let box = element.getBoundingClientRect();
+            // 判断鼠标在卡片的区域以及计算旋转角度
+            const calcX = -(y - box.y - box.height / 2) / multiple;
+            const calcY = (x - box.x - box.width / 2) / multiple;
+            const percentage = parseInt((x - box.x) / box.width * 1000) / 10;
+            
+            element.style.transform = "rotateX(" + calcX + "deg) " + "rotateY(" + calcY + "deg)";
+
+            // 额外增加一个控制 --per 的变量写入
+            img.style = `--per: ${percentage}%`;
+        }
+
+        mouseOverContainer.addEventListener("mousemove", (e) => {
+            window.requestAnimationFrame(function () {
+                transformElement(e.clientX, e.clientY);
+            });
+        });
+    </script>
+</body>
+</html>
