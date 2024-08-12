@@ -92,14 +92,6 @@
 
   img.addEventListener('mousedown', dragStart);
   img.addEventListener('wheel', zoom);
-
-  // 可选：添加旋转按钮
-  const rotateButton = document.createElement('button');
-  rotateButton.textContent = 'Rotate';
-  rotateButton.addEventListener('click', () => {
-    img.style.transform = `scale(${scale}) rotate(${getRotation() + 90}deg)`;
-  });
-  document.body.appendChild(rotateButton);
 </script>
 </body>
 </html>

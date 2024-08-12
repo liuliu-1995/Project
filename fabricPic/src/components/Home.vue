@@ -34,7 +34,7 @@
 </template>
 
 <script>
- import * as fabric from 'fabric'
+import * as fabric from 'fabric'
 
 export default {
   name: 'Home',
