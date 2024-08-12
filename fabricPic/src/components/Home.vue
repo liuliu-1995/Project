@@ -1,7 +1,10 @@
 <template>
   <div class="home">
     <div class="pic-wall-wrap">
-      <div @click="visible = true">照片</div>
+     <div>
+       <p><el-button style="width: 80px;" @click="visible = true" type="primary" round>照片库</el-button></p>
+       <p style="margin-top: 10px;"><el-button style="width: 80px;" @click="clear" round>清空</el-button></p>
+     </div>
       <div class="canvas-wrap">
         <canvas id="canvas" width="1000" height="600"></canvas>
       </div>
@@ -95,21 +98,20 @@ export default {
     },
     refreshImgList() {
       if (this.imgList.length) {
-        this.canvas.clear();
-        this.imgList.forEach((item, index)=>{
-          let imgElement = document.getElementById(`imgEl${index+1}`);
-          console.log('imgElement====================', imgElement);
-          let imgInstance = new fabric.Image(imgElement,{
-            left:100,
-            top:10,
-          });
-          imgInstance.set({
-            scaleX: 0.2,
-            scaleY: 0.2
-          });
-          this.canvas.add(imgInstance);
-        })
+        let imgElement = document.getElementById(`imgEl${this.imgList.length}`);
+        let imgInstance = new fabric.Image(imgElement,{
+          left:100,
+          top:10,
+        });
+        imgInstance.set({
+          scaleX: 0.2,
+          scaleY: 0.2
+        });
+        this.canvas.add(imgInstance);
       }
+    },
+    clear() {
+      this.canvas.clear();
     },
   },
 }
@@ -125,14 +127,13 @@ export default {
 }
 .pic-wall-wrap{
   position: relative;
-  border: 1px solid #efefef;
 }
 .canvas-wrap{
   width: 1000px;
   height: 600px;;
   position: absolute;
-  left: 50px;
-  top: 20px;
+  left: 100px;
+  top: 0px;
   background: url('../assets/bg.png') no-repeat;
   background-size: 100% 100%;
 }
@@ -155,8 +156,8 @@ export default {
   border-radius: 5px;
 }
 .img-item.active{
-  border: 1px solid #2689fd;
-  background-color: #2689fd;
+  border: 1px solid #e87e11;
+  background-color: #e87e11;
 }
 .img-item img{
   width: 160px;
